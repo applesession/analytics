@@ -22,7 +22,7 @@ services:
       target: production
     restart: unless-stopped
     ports:
-      - '4200:4200'
+      - '4550:4550'
     networks:
       - application
     env_file:
