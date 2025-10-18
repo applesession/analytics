@@ -1,0 +1,16 @@
+export const dates = [
+  { date: '08.31', value: 800 },
+  { date: '09.01', value: 1000 },
+  { date: '09.02', value: 1200 },
+  { date: '09.03', value: 1100 },
+  { date: '09.04', value: 1300 },
+  { date: '09.05', value: 1000 },
+  { date: '09.06', value: 2000 },
+  { date: '09.07', value: 950 },
+  { date: '09.08', value: 1570 },
+  { date: '09.09', value: 930 },
+  { date: '09.10', value: 1000 },
+  { date: '09.11', value: 1400 },
+  { date: '09.12', value: 1100 },
+  { date: '09.13', value: 1800 },
+];
