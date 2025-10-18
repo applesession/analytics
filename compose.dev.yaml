@@ -1,12 +1,10 @@
-# docker-compose -f compose.dev.yaml up --build --watch
+# docker-compose --env-file ./.env -f compose.prod.yaml up --build
 services:
   db:
-    container_name: postgres_db
     image: postgres:15
     restart: unless-stopped
     ports:
       - '5432:5432'
-
     networks:
       - application
     volumes:
@@ -18,7 +16,6 @@ services:
       timeout: 2s
       retries: 20
   backend:
-    container_name: analitika-backend
     build:
       context: ./backend
       target: development
@@ -27,7 +24,8 @@ services:
       - '4200:4200'
     networks:
       - application
-
+    env_file:
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
@@ -41,7 +39,6 @@ services:
         - path: ./backend/package.json
           action: rebuild
   frontend:
-    container_name: analitika-frontend
     build:
       context: ./frontend
       target: development
@@ -61,7 +58,6 @@ services:
       backend:
         condition: service_started
   prisma-studio:
-    container_name: prisma-studio
     image: node:20-alpine
     working_dir: /app
     volumes:
@@ -71,6 +67,8 @@ services:
       - '5555:5555'
     networks:
       - application
+    env_file:
+      - ./.env
     depends_on:
       db:
         condition: service_healthy

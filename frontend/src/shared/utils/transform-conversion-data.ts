@@ -6,7 +6,7 @@ interface IConversionItem {
 }
 
 export function transformConversionData(data: IConversion | null): IConversionItem[] | [] {
-  if (!data) return [];
+  if (!data?.counters || !data.percentages) return [];
 
   const counters: IConversionItem[] = Object.entries(data.counters).map(([key, value]) => ({
     stage: key,

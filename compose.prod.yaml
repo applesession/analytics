@@ -1,7 +1,6 @@
-# docker-compose -f compose.prod.yaml up --build
+# docker-compose --env-file ./.env -f compose.prod.yaml up --build
 services:
   db:
-    container_name: postgres_db
     image: postgres:15
     restart: unless-stopped
     ports:
@@ -18,7 +17,6 @@ services:
       timeout: 2s
       retries: 5
   backend:
-    container_name: analitika-backend
     build:
       context: ./backend
       target: production
@@ -33,7 +31,6 @@ services:
       db:
         condition: service_healthy
   frontend:
-    container_name: analitika-frontend
     build:
       context: ./frontend
       target: production

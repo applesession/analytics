@@ -7,7 +7,7 @@ interface IQualityItem {
 }
 
 export function transformQualityData(data: IQuality | null): IQualityItem[] | [] {
-  if (!data) return [];
+  if (!data?.counters || !data.percentages) return [];
 
   const counters: IQualityItem[] = Object.entries(data.counters).map(([key, value]) => ({
     type: 'counter' as const,
