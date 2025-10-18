@@ -1,4 +1,4 @@
-import { IMessage, IMessageLite, IDialogMessages } from '@/shared/types/message.type';
+import { IMessage, IMessageLite, IDialogMessages } from '../../shared/types/message.type';
 import fs from 'fs';
 import path from 'path';
 

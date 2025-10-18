@@ -1,8 +1,8 @@
 import { OpenAI } from 'openai';
 import { Readable } from 'stream';
-import { Prisma } from '@/generated/prisma';
-import { readJsonLines } from '@/shared/utils';
-import { batchRequestService } from '@/modules/services';
+import { Prisma } from '../../generated/prisma';
+import { readJsonLines } from '../../shared/utils';
+import { batchRequestService } from '../../modules/services';
 import fs from 'fs';
 
 class BatchClient {

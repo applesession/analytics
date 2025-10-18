@@ -1,8 +1,8 @@
-import { IDialogMessages, IMessageLite } from '@/shared/types/message.type';
+import { IDialogMessages, IMessageLite } from '../../shared/types/message.type';
 import { Batch as OpenAIBatch } from 'openai/resources/batches';
-import { IBatchRequest } from '@/shared/types';
-import { dialogMetricSchema, PROMPT } from '@/shared/config';
-import { prisma } from '@/shared/api';
+import { IBatchRequest } from '../../shared/types';
+import { dialogMetricSchema, PROMPT } from '../../shared/config';
+import { prisma } from '../../shared/api';
 
 class BatchService {
   private PROMPT = PROMPT;
