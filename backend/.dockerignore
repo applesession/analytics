@@ -1,7 +1,11 @@
 node_modules
+.git
+.gitignore
+*.md
+Dockerfile
+.dockerignore
 dist
 build
-.env
 generated
 src/generated
 src/generated/prisma

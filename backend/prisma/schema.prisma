@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Batch {
+  id              String       @id
+
+  status          BatchStatus  @default(validating)
+  inputFileId     String       @unique  @map("input_file_id")
+  outputFileId    String?      @unique  @map("output_file_id")
+  errorFileId     String?      @unique  @map("error_file_id")
+
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  BatchRequest BatchRequest[]
+  ConversionMetric ConversionMetric?       
+  AggregatedMetric QualityMetric? 
+  @@map("batch")
+}
+
+model BatchRequest {
+  id              String      @id
+  batchId         String      @map("batch_id")
+  batch           Batch       @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  statusCode      Int         @map("status_code")
+  model           String
+  error           Json?       
+
+  createdAt       DateTime    @default(now()) @map("created_at")
+  
+  DialogMetric DialogMetric? 
+
+  @@map("batch_request")
+}
+
+model DialogMetric  {
+  id                 String @id
+  batchRequestId     String @unique @map("batch_request_id")
+  batchRequest       BatchRequest   @relation(fields: [batchRequestId], references: [id], onDelete: Cascade)
+  conversationId     String   @map("conversation_id")
+
+  dialogStarted      Boolean  @map("dialog_started")
+  serviceChosen      Boolean  @map("service_chosen")
+  specialistChosen   Boolean  @map("specialist_chosen")
+  recorded           Boolean    
+  visited            Boolean
+
+  messagesBeforeRecord       Int? @map("messages_before_record")
+  scriptAdherencePercent     Int  @map("script_adherence_percent")
+  leadingQuestionsPercent    Int  @map("leading_questions_percent")  
+
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("dialog_metric")
+}
+
+model ConversionMetric {
+  id                  String   @id @default(cuid())
+  batchId             String   @unique @map("batch_id")
+  batch               Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  dialogsStarted      Int?     @map("dialogs_started")
+  servicesChosen      Int?     @map("services_chosen")
+  specialistsChosen   Int?     @map("specialists_chosen")
+  recordsMade         Int?     @map("records_made")
+  visitsMade          Int?     @map("visits_made")
+  dropoffPercent      Int?     @map("dropoff_percent")
+
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  @@map("conversion_metric")
+}
+
+model QualityMetric {
+  id                      String  @id @default(cuid())
+  batchId                 String  @unique @map("batch_id")
+  batch                   Batch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  avgMessagesBeforeRecord Int?  @map("avg_messages_before_record")
+  scriptAdherencePercent  Int   @map("script_adherence_percent")
+  leadingQuestionsPercent Int   @map("leading_questions_percent")
+
+  createdAt               DateTime @default(now())
+
+  @@map("quality_metric")
+}
+
+enum BatchStatus {
+  validating
+  failed
+  in_progress
+  finalizing
+  completed
+  expired
+  cancelling
+  cancelled
+}
