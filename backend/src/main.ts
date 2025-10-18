@@ -3,10 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { PrismaClient } from './generated/prisma';
-
-const prisma = new PrismaClient();
-
 async function main() {
   const app = express();
   app.use(express.json());
