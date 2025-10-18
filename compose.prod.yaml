@@ -7,7 +7,7 @@ services:
     ports:
       - '5432:5432'
     env_file:
-      - ./backend/.env
+      - ./.env
     networks:
       - application
     volumes:
@@ -28,7 +28,7 @@ services:
     networks:
       - application
     env_file:
-      - ./backend/.env
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
@@ -37,11 +37,17 @@ services:
     build:
       context: ./frontend
       target: production
+      args:
+        - VITE_SERVER_API=${VITE_SERVER_API}
     restart: unless-stopped
+    environment:
+      - VITE_SERVER_API
     ports:
       - '5173:80'
     networks:
       - application
+    env_file:
+      - ./.env
     depends_on:
       backend:
         condition: service_started

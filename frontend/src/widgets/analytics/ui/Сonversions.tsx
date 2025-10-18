@@ -2,17 +2,15 @@ import { ResponsiveContainer, XAxis, Bar, YAxis, BarChart, LabelList } from 'rec
 import { Title, Section, ActivityDateSelector, Tooltip } from '@/shared/ui';
 import { useGetConvesionMetrics } from '@/features/conversion';
 import { useState } from 'react';
+import { transformConversionData } from '@/shared/utils';
 
 export function Conversions() {
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
 
   const { data, isLoading } = useGetConvesionMetrics(startTime, endTime);
+  const transformed = transformConversionData(data);
 
-  const readyData = Object.entries(data.counters).map(([key, value]) => ({
-    stage: key,
-    count: value,
-  }));
   return (
     <Section>
       <div className='flex justify-between items-center'>
@@ -28,7 +26,7 @@ export function Conversions() {
       {!isLoading && (
         <ResponsiveContainer>
           <BarChart
-            data={readyData}
+            data={transformed}
             layout='vertical'
             margin={{ top: 20, right: 50, left: 100, bottom: 40 }}
           >

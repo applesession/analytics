@@ -6,16 +6,16 @@ interface IQualityItem {
   value: number;
 }
 
-export function transformQualityData(data: IQuality | null): IQualityItem[] {
+export function transformQualityData(data: IQuality | null): IQualityItem[] | [] {
   if (!data) return [];
 
-  const counters = Object.entries(data.counters).map(([key, value]) => ({
+  const counters: IQualityItem[] = Object.entries(data.counters).map(([key, value]) => ({
     type: 'counter' as const,
     name: key,
     value,
   }));
 
-  const percentages = Object.entries(data.percentages).map(([key, value]) => ({
+  const percentages: IQualityItem[] = Object.entries(data.percentages).map(([key, value]) => ({
     type: 'percent' as const,
     name: key,
     value,

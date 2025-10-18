@@ -8,6 +8,8 @@ COPY . .
 CMD ["npm", "run", "dev"]  
 
 FROM deps AS builder
+ARG VITE_SERVER_API
+ENV VITE_SERVER_API=$VITE_SERVER_API
 COPY . .
 RUN npm run build
 
