@@ -3,19 +3,25 @@ import { ActivityDateSelector, Section, Title } from '@/shared/ui';
 import { listVariants, listItemVariants } from '@/shared/configs';
 import { useGetQualityMetrics } from '@/features/quality';
 import { transformQualityData } from '@/shared/utils';
+import { useState } from 'react';
 
 export function Quality() {
-  const { data, isLoading } = useGetQualityMetrics(
-    '2020-01-01T00:00:00.000Z',
-    '2030-12-31T23:59:59.999Z'
-  );
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
+
+  const { data, isLoading } = useGetQualityMetrics(startTime, endTime);
   const transformed = transformQualityData(data);
 
   return (
     <Section>
       <div className='flex justify-between items-center'>
         <Title>Quality</Title>
-        <ActivityDateSelector />
+        <ActivityDateSelector
+          onChange={(start, end) => {
+            setStartTime(start);
+            setEndTime(end);
+          }}
+        />
       </div>
 
       {!isLoading && (

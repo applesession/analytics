@@ -1,19 +1,28 @@
 import { ResponsiveContainer, XAxis, Bar, YAxis, BarChart, LabelList } from 'recharts';
 import { Title, Section, ActivityDateSelector, Tooltip } from '@/shared/ui';
-import { useGetMetrics } from '@/features/conversion';
+import { useGetConvesionMetrics } from '@/features/conversion';
+import { useState } from 'react';
 
 export function Conversions() {
-  const { data, isLoading } = useGetMetrics('2020-01-01T00:00:00.000Z', '2030-12-31T23:59:59.999Z');
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
+
+  const { data, isLoading } = useGetConvesionMetrics(startTime, endTime);
+
   const readyData = Object.entries(data.counters).map(([key, value]) => ({
     stage: key,
     count: value,
   }));
-
   return (
     <Section>
       <div className='flex justify-between items-center'>
         <Title>Conversion</Title>
-        <ActivityDateSelector />
+        <ActivityDateSelector
+          onChange={(start, end) => {
+            setStartTime(start);
+            setEndTime(end);
+          }}
+        />
       </div>
 
       {!isLoading && (
