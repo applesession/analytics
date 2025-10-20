@@ -10,7 +10,7 @@ async function main() {
   app.use(cors({ origin: process.env.ALLOWED_ORIGIN }));
   app.use('/', routes);
 
-  app.listen(process.env.PORT, () => console.log('Server started on', process.env.PORT));
+  app.listen(process.env.NODE_PORT, () => console.log('Server started on', process.env.NODE_PORT));
 }
 
 main();

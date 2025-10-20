@@ -1,28 +1,26 @@
-# docker-compose --env-file ./.env -f compose.prod.yaml up --build
+# docker-compose -f compose.prod.yaml up --build
 services:
   db:
     image: postgres:15
     restart: unless-stopped
-    ports:
-      - '5432:5432'
-    env_file:
-      - ./.env
     networks:
       - application
+    env_file:
+      - ./.env
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres -d postgres']
-      interval: 2s
+      interval: 5s
       timeout: 2s
-      retries: 5
+      retries: 20
   backend:
     build:
       context: ./backend
       target: production
     restart: unless-stopped
     ports:
-      - '4550:4550'
+      - ${NODE_PORT}:${NODE_PORT}
     networks:
       - application
     env_file:
@@ -36,15 +34,14 @@ services:
       target: production
       args:
         - VITE_SERVER_API=${VITE_SERVER_API}
-    restart: unless-stopped
     environment:
-      - VITE_SERVER_API
+      - VITE_PORT=${VITE_PORT}
+      - VITE_HOST=${VITE_HOST}
+    restart: unless-stopped
     ports:
-      - '5173:80'
+      - '${VITE_PORT}:80'
     networks:
       - application
-    env_file:
-      - ./.env
     depends_on:
       backend:
         condition: service_started
