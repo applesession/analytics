@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DATE_OPTIONS = ['1d', '7d', '30d'] as const;
 type DateOption = (typeof DATE_OPTIONS)[number];
@@ -32,6 +32,10 @@ export function ActivityDateSelector({ onChange }: ActivityDateSelectorProps) {
 
     onChange?.(start, end);
   };
+
+  useEffect(() => {
+    handleSelect('1d');
+  }, []);
 
   return (
     <ul className='grid grid-cols-3 gap-4 text-center'>
