@@ -1,9 +1,10 @@
 import { batchService, messageService } from '../modules/services';
 import { batchClient } from '../modules/clients';
-import { saveJsonLines } from '../shared/utils';
+import { logger, saveJsonLines } from '../shared/utils';
 
 export async function createBatch() {
   try {
+    logger.info('Start creating batch');
     const messages = await messageService.getMessages();
     const grouped = messageService.groupAndSortMessages(messages);
     const prepared = batchService.prepareBatch(grouped);
@@ -13,8 +14,9 @@ export async function createBatch() {
     const fileObject = await batchClient.uploadFile(filePath);
     const batch = await batchClient.create(fileObject);
     await batchService.create(batch);
+    logger.info('Finished creating batch');
   } catch (error) {
-    console.log('error', error);
+    logger.error('Failed to create batch', error);
   }
 }
 

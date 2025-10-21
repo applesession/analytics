@@ -1,4 +1,4 @@
-# docker-compose -f compose.dev.yaml up --build
+# docker-compose -f compose.dev.yaml up --build --watch
 services:
   db:
     image: postgres:15

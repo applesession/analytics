@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import routes from './modules/routers/index';
+import './jobs/scheduler';
 dotenv.config();
 
 async function main() {
